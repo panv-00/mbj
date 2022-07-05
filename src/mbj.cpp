@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "mbj_Card.h"
-#include "mbj_Pile.h"
+#include "Card.h"
+#include "Pile.h"
 
 int main(int argc, char *argv[])
 {
