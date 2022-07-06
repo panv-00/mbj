@@ -5,7 +5,7 @@
 #include "Card.h"
 #include "Pile.h"
 
-Pile::Pile() : length{0}, allocated_size {26}
+Pile::Pile() : length{0}, allocated_size {52 * DECKS}
 {
   deck = (Card *)malloc(allocated_size * sizeof(Card));
 }
@@ -17,12 +17,6 @@ Pile::~Pile()
 
 void Pile::push(Card card)
 {
-  if (length == allocated_size)
-  {
-    allocated_size *= 2;
-    deck = (Card *)realloc(deck, allocated_size * sizeof(Card));
-  }
-
   deck[length++].set_card(card);
 }
 
