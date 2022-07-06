@@ -1,5 +1,5 @@
-#ifndef MBJ_PILE_H
-#define MBJ_PILE_H
+#ifndef PILE_H
+#define PILE_H
 
 #define DECKS 2
 
@@ -23,4 +23,4 @@ private:
   Card *deck;
 };
 
-#endif /* MBJ_PILE_H */
+#endif /* PILE_H */

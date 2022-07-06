@@ -1,5 +1,5 @@
-#ifndef MBJ_CARD_H
-#define MBJ_CARD_H
+#ifndef CARD_H
+#define CARD_H
 
 const char suits[] = "CDHS";
 const char card_faces[] = "23456789TJQKA";
@@ -27,4 +27,4 @@ private:
   int face_to_value(char f);
 };
 
-#endif /* MBJ_CARD_H */
+#endif /* CARD_H */
