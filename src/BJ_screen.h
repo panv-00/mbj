@@ -1,6 +1,8 @@
 #ifndef BJ_SCREEN_H
 #define BJ_SCREEN_H
 
+#include "Card.h"
+
 enum color_codes
 {
   COLOR_DEFAULT = 0,
@@ -42,5 +44,6 @@ void move_to(int row, int col);
 void save_position();
 void restore_position();
 void draw_box(int width, int height);
+void draw_card(Card card, int row, int col);
 
 #endif /* BJ_SCREEN_H */

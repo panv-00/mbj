@@ -77,3 +77,11 @@ void draw_box(int width, int height)
   restore_position();
   move_down(1);
 }
+
+void draw_card(Card card, int row, int col)
+{
+  move_to(row, col);
+  draw_box(2,1);
+  move_to(row + 1, col + 1);
+  printf("%c%c", card.get_face(), card.get_suit());
+}
