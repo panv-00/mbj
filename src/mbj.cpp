@@ -3,42 +3,28 @@
 
 #include "Card.h"
 #include "Pile.h"
+#include "BJ_screen.h"
 
 int main(int argc, char *argv[])
 {
-  Card a_card;
-  Pile pile;
+  const int split = DECKS * 5;
 
-  a_card.set_face_suit('5', 'H');
-  pile.push(a_card);
-  pile.dump();
+//  Card a_card;
+//  Pile pile;
+//  a_card.set_face_suit('5', 'H');
+//  pile.push(a_card);
+//  pile.dump();
 
-  a_card.set_face_suit('6', 'D');
-  pile.push(a_card);
-  pile.dump();
+  clear_screen(BEGIN_TO_END);
+  move_to(1, 1);
+  draw_box(60, 15);
 
-  a_card.set_face_suit('8', 'S');
-  pile.push(a_card);
-  pile.dump();
+  save_position();
+  move_to(2,2);
+  printf("Let the game begin...");
+  restore_position();
 
-  a_card.set_face_suit('9', 'H');
-  pile.push(a_card);
-  pile.dump();
-
-  a_card.set_face_suit('Q', 'C');
-  pile.push(a_card);
-  pile.dump();
-
-  a_card.set_face_suit('A', 'C');
-  pile.push(a_card);
-  pile.dump();
-  
-  pile.shuffle();
-  pile.dump();
-
-  sleep(1);
-  pile.shuffle();
-  pile.dump();
+  printf("\nEnd.\n");
 
   return 0;
 }

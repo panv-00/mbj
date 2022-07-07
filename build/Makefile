@@ -2,9 +2,10 @@ CPP=g++
 CFLAGS=-Wall -O3 -g
 VPATH=../src
 
-OBJECTS= \
-	Card.o \
-	Pile.o
+OBJECTS=      \
+	Card.o      \
+	Pile.o      \
+	BJ_screen.o \
 
 default: $(OBJECTS)
 	$(CPP) -o ../mbj ../src/mbj.cpp \
