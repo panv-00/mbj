@@ -5,6 +5,8 @@
 #include "Pile.h"
 #include "BJ_screen.h"
 
+// 
+
 void draw_table(Pile table[6])
 {
   Card card;
