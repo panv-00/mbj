@@ -27,6 +27,12 @@ Card Pile::pop()
   return deck[--length];
 }
 
+Card Pile::read(int index)
+{
+
+  return deck[index];
+}
+
 void Pile::dump()
 {
   printf("\n");

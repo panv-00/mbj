@@ -11,6 +11,7 @@ public:
 
   void push(Card card);
   Card pop();
+  Card read(int index);
   void populate_full_deck();
   void dump();
   void shuffle();

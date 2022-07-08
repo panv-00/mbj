@@ -37,7 +37,7 @@ void Card::set_face_suit(char f, char s)
 
 void Card::dump()
 {
-  printf("%c%c, ", face, suit);
+  printf("%c%c", face, suit);
 }
 
 void Card::set_card(Card card)
