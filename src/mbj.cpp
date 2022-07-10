@@ -216,9 +216,11 @@ int main(int argc, char *argv[])
           table[slot].push(pile.pop());
         }
 
-        while (table[slot].get_value() >= 21 && slot != 7) { slot++; }
-
-        while (slot_bet[slot] == 0 && slot != 7) { slot++; }
+        while ((table[slot].get_value() >= 21 || slot_bet[slot] == 0) &&
+            slot != 7)
+        {
+          slot++;
+        }
 
         if (slot == 7) { break; }
 
@@ -284,7 +286,7 @@ int main(int argc, char *argv[])
 
           case 't':
           case 'T':
-            if (allow_split && wallet >= slot_bet[slot])
+            if (allow_split)
             {
               table[slot + 1].push(table[slot].pop());
               slot_bet[slot + 1] = slot_bet[slot];
