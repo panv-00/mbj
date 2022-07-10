@@ -5,7 +5,7 @@
 #include "Card.h"
 #include "Pile.h"
 
-Pile::Pile() : length{0}, allocated_size {52 * DECKS}
+Pile::Pile() : length{0}, value{0}, allocated_size {52 * DECKS}
 {
   deck = (Card *)malloc(allocated_size * sizeof(Card));
 }
@@ -17,14 +17,35 @@ Pile::~Pile()
 
 void Pile::push(Card card)
 {
+  int value_to_add = card.get_value();
+
   deck[length++].set_card(card);
+
+  if (value_to_add == 11)
+  {
+    if (value + value_to_add > 21)
+    {
+      value_to_add = 1;
+    }
+  }
+
+  value += value_to_add;
 }
 
 Card Pile::pop()
 {
-//  if (length == 0) { return NULL; }
+  Card card = deck[--length];
 
-  return deck[--length];
+  if (card.get_value() == 11)
+  {
+    value -= 1;
+  }
+  else
+  {
+    value -= card.get_value();
+  }
+
+  return card;
 }
 
 Card Pile::read(int index)
@@ -94,3 +115,10 @@ void Pile::shuffle()
     shuffle_array[index_2] = 0;
   }
 }
+
+void Pile::set_value(int new_value)
+{
+  value = new_value;
+}
+
+
