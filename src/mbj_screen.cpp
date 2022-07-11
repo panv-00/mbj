@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "BJ_screen.h"
+#include "mbj_screen.h"
 
 void clear_screen(int code)
 {

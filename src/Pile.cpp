@@ -17,19 +17,24 @@ Pile::~Pile()
 
 void Pile::push(Card card)
 {
-  int value_to_add = card.get_value();
+  int can_diminish = 0;
+  int clean_value = 0;
 
   deck[length++].set_card(card);
 
-  if (value_to_add == 11)
+  for (int i = 0; i < length; i++)
   {
-    if (value + value_to_add > 21)
-    {
-      value_to_add = 1;
-    }
+    clean_value += read(i).get_value();
+    if (read(i).get_value() == 11) { can_diminish++; }
   }
 
-  value += value_to_add;
+  while (can_diminish > 0 && clean_value > 21)
+  {
+    clean_value -= 10;
+    can_diminish--;
+  }
+
+  value = clean_value;
 }
 
 Card Pile::pop()
@@ -61,9 +66,10 @@ void Pile::dump()
   for (int i = 0; i < length; i++)
   {
     deck[i].dump();
+    printf("(%d)", deck[i].get_value());
   }
 
-  printf("\n");
+  printf("==>%d\n", value);
 }
 
 void Pile::populate_full_deck()
@@ -120,5 +126,4 @@ void Pile::set_value(int new_value)
 {
   value = new_value;
 }
-
 

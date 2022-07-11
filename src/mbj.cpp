@@ -334,6 +334,7 @@ int main(int argc, char *argv[])
           }
         }
       }
+      
       else if (table[0].get_value() == 21 && table[0].get_length() == 2)
       {
         for (int i = 1; i < 7; i++)
@@ -344,6 +345,7 @@ int main(int argc, char *argv[])
           }
         }
       }
+      
       else if (table[0].get_value() == 21)
       {
         for (int i = 1; i < 7; i++)
@@ -358,6 +360,7 @@ int main(int argc, char *argv[])
           }
         }
       }
+      
       else
       {
         for (int i = 1; i < 7; i++)
@@ -378,6 +381,7 @@ int main(int argc, char *argv[])
           }
         }
       }
+      
       printf("Round Summary (CASH) ");
       mbj_format(earnings);
       mbj_get_char(" ..Press Enter to Continue..");
@@ -389,6 +393,7 @@ int main(int argc, char *argv[])
         {
           table[i].pop();
         }
+        
         table[i].set_value(0);
         slot_bet[i] = 0;
       }
@@ -396,12 +401,14 @@ int main(int argc, char *argv[])
       if (wallet == 0)
       {
         printf("You are bankrupt.. :(\n");
+        
         return 0;
       }
 
       if (wallet >= 1000000)
       {
         printf("The Casino in bankrupt.. :)\n");
+        
         return 0;
       }
 
@@ -410,3 +417,4 @@ int main(int argc, char *argv[])
   }
   return 0;
 }
+

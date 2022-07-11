@@ -1,5 +1,5 @@
-#ifndef BJ_SCREEN_H
-#define BJ_SCREEN_H
+#ifndef MBJ_SCREEN_H
+#define MBJ_SCREEN_H
 
 #include "Card.h"
 
@@ -46,4 +46,4 @@ void restore_position();
 void draw_box(int width, int height);
 void draw_card(Card card, int row, int col);
 
-#endif /* BJ_SCREEN_H */
+#endif /* MBJ_SCREEN_H */

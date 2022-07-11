@@ -19,6 +19,7 @@ public:
   int get_value() { return value; };
   int get_allocated_size() { return allocated_size; };
   void set_value(int new_value);
+  void refresh_value();
 
 private:
   int length;

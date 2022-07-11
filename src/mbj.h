@@ -7,7 +7,7 @@
 
 #include "Card.h"
 #include "Pile.h"
-#include "BJ_screen.h"
+#include "mbj_screen.h"
 #include "mbj_get_input.h"
 #include "mbj_format_number.h"
 
