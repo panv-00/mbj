@@ -16,6 +16,7 @@ void draw_table(const char *message, int post_delay)
 {
   Card card;
   int tmp;
+  int show_card;
 
   clear_screen(BEGIN_TO_END);
   save_position();
@@ -43,15 +44,14 @@ void draw_table(const char *message, int post_delay)
       for (int j = 0; j < tmp; j++)
       {
         card = table[i].read(j);
+        show_card = 1;
         
         if (!dealer_turn && i == 0 && j == 1)
         {
-          draw_card(card, 5, 10, 0);
+          show_card = 0;
         }
-        else
-        {
-          draw_card(card, 5 + i*3, 6 + j*4, 1);
-        }
+     
+        draw_card(card, 5 + i*3, 6 + j*4, show_card);
       
         if (i != 0 || dealer_turn == 1)
         {
