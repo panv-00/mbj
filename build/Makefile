@@ -5,7 +5,6 @@ VPATH=../src
 OBJECTS=          \
 	Card.o          \
 	Pile.o          \
-	mbj_screen.o    \
 	mbj_get_input.o \
 	mbj_format_number.o
 

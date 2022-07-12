@@ -3,6 +3,15 @@
 #define BOX_WIDTH 63
 #define BOX_HEIGHT 24
 
+void draw_card(Card card, int row, int col, int show_card)
+{
+  move_to(row, col);
+  draw_shape(2, 1, ',', '-', '.', '|', '|', '|', '_', '|');
+  move_to(row + 1, col + 1);
+  if (show_card) { card.dump(); }
+}
+
+
 void draw_table(const char *message, int post_delay)
 {
   Card card;
@@ -37,12 +46,11 @@ void draw_table(const char *message, int post_delay)
         
         if (!dealer_turn && i == 0 && j == 1)
         {
-          move_to(5, 10);
-          draw_box(2,1);
+          draw_card(card, 5, 10, 0);
         }
         else
         {
-          draw_card(card, 5 + i*3, 6 + j*4);
+          draw_card(card, 5 + i*3, 6 + j*4, 1);
         }
       
         if (i != 0 || dealer_turn == 1)
