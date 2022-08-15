@@ -27,4 +27,4 @@ private:
   int face_to_value(char f);
 };
 
-#endif /* CARD_H */
+#endif

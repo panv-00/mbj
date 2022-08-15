@@ -1,9 +1,16 @@
 #include "mbj.h"
 
-#define BOX_WIDTH 63
-#define BOX_HEIGHT 24
+mbj::mbj()
+{
 
-void draw_card(Card card, int row, int col, int show_card)
+}
+
+mbj::~mbj()
+{
+
+}
+
+void mbj::draw_card(Card card, int row, int col, bool show_card)
 {
   move_to(row, col);
   draw_shape(2, 1, ',', '-', '.', '|', '|', '|', '_', '|');
@@ -11,12 +18,11 @@ void draw_card(Card card, int row, int col, int show_card)
   if (show_card) { card.dump(); }
 }
 
-
-void draw_table(const char *message, int post_delay)
+void mbj::draw_table(const char *message, int post_delay)
 {
   Card card;
   int tmp;
-  int show_card;
+  bool show_card;
 
   clear_screen(BEGIN_TO_END);
   save_position();
@@ -44,11 +50,11 @@ void draw_table(const char *message, int post_delay)
       for (int j = 0; j < tmp; j++)
       {
         card = table[i].read(j);
-        show_card = 1;
+        show_card = true;
         
         if (!dealer_turn && i == 0 && j == 1)
         {
-          show_card = 0;
+          show_card = false;
         }
      
         draw_card(card, 5 + i*3, 6 + j*4, show_card);
@@ -96,7 +102,7 @@ void draw_table(const char *message, int post_delay)
   sleep(post_delay);
 }
 
-void setup_game()
+void mbj::setup_game()
 {
   // deal a cards for the dealer
   table[0].push(pile.pop());
@@ -127,7 +133,7 @@ void setup_game()
   }
 }
 
-void draw_welcome_screen(int status, int slot, int post_delay)
+void mbj::draw_welcome_screen(int status, int slot, int post_delay)
 {
   clear_screen(BEGIN_TO_END);
   save_position();
@@ -166,263 +172,157 @@ void draw_welcome_screen(int status, int slot, int post_delay)
   sleep(post_delay);
 }
 
-int main(int argc, char *argv[])
+int mbj::set_bets()
 {
-  uint32_t temp_bet;
-  uint32_t earnings;
-  int allow_double;
-  int allow_split;
-  int allow_surrender;
-  char slot_action;
+  int32_t temp_bet;
+  mbj_get_input mgi;
 
-  // play forever
-  while (1)
+  for (int i = 1; i <= 3; i++)
   {
-    while (pile.get_length() > 0) { pile.pop(); }
-    pile.populate_full_deck();
-    pile.shuffle();
-    turn = 0;
-
-    // while there is cards in the shoe before split.
-    while (1)
+    while(1)
     {
-      slot = 7;
+      draw_welcome_screen(STATUS_WAITING, i, DELAY_0);
+      printf("Slot %d -> ", i);
+      temp_bet = mgi.mbj_get_num("Q->Quit, or Enter Your Bet: ");
 
-      for (int i = 1; i <= 3; i++)
+      if (temp_bet == -1)
       {
-        while(1)
-        {
-          draw_welcome_screen(STATUS_WAITING, i, DELAY_0);
-          printf("Slot %d -> ", i);
-          temp_bet = mbj_get_num("Enter Your Bet: ");
-
-          if (temp_bet >= 0 && wallet >= temp_bet)
-          {
-            slot_bet[2 * (i - 1) + 1] = temp_bet;
-            wallet -= temp_bet;
-            break;
-          }
-        }
+        return -1;
       }
 
-      draw_welcome_screen(STATUS_READY, SLOT_0_DEALER, DELAY_2);
-
-      dealer_turn = 0;
-      turn++;
-      setup_game();
-
-      slot = 1;
-
-      while (1)
+      if (temp_bet >= 0 && wallet >= temp_bet)
       {
-        allow_double = 0;
-        allow_split = 0;
-        allow_surrender = 0;
-
-        if (slot % 2 == 0 && table[slot].get_length() == 1)
-        {
-          table[slot].push(pile.pop());
-        }
-
-        while ((table[slot].get_value() >= 21 || slot_bet[slot] == 0) &&
-            slot != 7)
-        {
-          slot++;
-        }
-
-        if (slot == 7) { break; }
-
-        draw_table("Waiting for Action..", DELAY_0);
-        printf("[ H->Hit S->Stand ");
-
-        if (table[slot].get_length() == 2)
-        {
-          allow_surrender = 1;
-
-          if (wallet >= slot_bet[slot]) { allow_double = 1; }
-        }
-
-        if (allow_surrender) { printf("R->suRrender "); }
-
-        if (allow_double) { printf("D->Double "); }
-
-        if (slot % 2 == 1 &&
-            table[slot + 1].get_length() == 0 &&
-            table[slot].get_length() == 2 &&
-            wallet >= slot_bet[slot] &&
-            table[slot].read(0).get_value() == table[slot].read(1).get_value())
-        {
-          allow_split = 1;
-        }
-
-        if (allow_split) { printf("T->spliT "); }
-
-        slot_action = mbj_get_char("] : ");
-
-        switch(slot_action)
-        {
-          case 'h':
-          case 'H':
-            table[slot].push(pile.pop());
-            break;
-
-          case 's':
-          case 'S':
-            slot++;
-            break;
-
-          case 'r':
-          case 'R':
-            if (allow_surrender)
-            {
-              wallet += slot_bet[slot] / 2;
-              slot_bet[slot] = 0;
-              slot++;
-            }
-            break;
-
-          case 'd':
-          case 'D':
-            if (allow_double)
-            {
-              wallet -= slot_bet[slot];
-              slot_bet[slot] *= 2;
-              table[slot].push(pile.pop());
-              slot++;
-            }
-            break;
-
-          case 't':
-          case 'T':
-            if (allow_split)
-            {
-              table[slot + 1].push(table[slot].pop());
-              slot_bet[slot + 1] = slot_bet[slot];
-              wallet -= slot_bet[slot];
-              table[slot].push(pile.pop());
-
-              if (table[slot].read(0).get_face() == 'A')
-              {
-                slot++;
-              }
-            }
-            break;
-        }
+        slot_bet[2 * (i - 1) + 1] = temp_bet;
+        wallet -= temp_bet;
+        break;
       }
-
-      dealer_turn = 1;
-
-      while (table[0].get_value() < 17)
-      {
-        table[0].push(pile.pop());
-        draw_table("Dealer Turn..", DELAY_1);
-      }
-      draw_table("TADA..", DELAY_1);
-
-      earnings = 0;
-
-      if (table[0].get_value() > 21)
-      {
-        for (int i = 1; i < 7; i++)
-        {
-          if (table[i].get_value() < 21)
-          {
-            earnings += slot_bet[i] * 2;
-          }
-          else if (table[i].get_value() == 21)
-          {
-            if (table[i].get_length() == 2)
-            {
-              earnings += slot_bet[i] * 25 / 10;
-            }
-            else
-            {
-              earnings += slot_bet[i] * 2;
-            }
-          }
-        }
-      }
-      
-      else if (table[0].get_value() == 21 && table[0].get_length() == 2)
-      {
-        for (int i = 1; i < 7; i++)
-        {
-          if (table[i].get_value() == 21 && table[i].get_length() == 2)
-          {
-            earnings += slot_bet[i];
-          }
-        }
-      }
-      
-      else if (table[0].get_value() == 21)
-      {
-        for (int i = 1; i < 7; i++)
-        {
-          if (table[i].get_value() == 21 && table[i].get_length() == 2)
-          {
-            earnings += slot_bet[i] * 25 / 10;
-          }
-          else if (table[i].get_value() == 21)
-          {
-            earnings += slot_bet[i];
-          }
-        }
-      }
-      
-      else
-      {
-        for (int i = 1; i < 7; i++)
-        {
-          if (table[i].get_value() == 21 && table[i].get_length() == 2)
-          {
-            earnings += slot_bet[i] * 25 / 10;
-          }
-          else if (table[i].get_value() <= 21 &&
-              table[i].get_value() > table[0].get_value())
-          {
-            earnings += slot_bet[i] * 2;
-          }
-          else if (table[i].get_value() <= 21 &&
-              table[i].get_value() == table[0].get_value())
-          {
-            earnings += slot_bet[i];
-          }
-        }
-      }
-      
-      printf("Round Summary (CASH) ");
-      mbj_format(earnings);
-      mbj_get_char(" ..Press Enter to Continue..");
-      wallet += earnings;
-
-      for (int i = 0; i < 7; i++)
-      {
-        while (table[i].get_length() > 0)
-        {
-          table[i].pop();
-        }
-        
-        table[i].set_value(0);
-        slot_bet[i] = 0;
-      }
-
-      if (wallet == 0)
-      {
-        printf("You are bankrupt.. :(\n");
-        
-        return 0;
-      }
-
-      if (wallet >= 1000000)
-      {
-        printf("The Casino in bankrupt.. :)\n");
-        
-        return 0;
-      }
-
-      if (pile.get_length() <= split) { break; }
     }
   }
+
   return 0;
+}
+
+int mbj::analyze_slot(int slot_index)
+{
+  if (table[slot_index].get_value() < 17) { return SLOT_CAN_HIT; }
+
+  if (table[slot_index].get_value() < 21 ||
+        (table[slot_index].get_value() == 21 &&
+         table[slot_index].get_length() != 2)) { return SLOT_CAN_STAND; }
+
+  if (table[slot_index].get_value() == 21) { return SLOT_BJ; }
+
+  return SLOT_BUST;
+}
+
+bool mbj::slots_available()
+{
+  bool return_value = false;
+
+  for (int i = 1; i < 7; i++)
+  {
+    if (analyze_slot(i) == SLOT_CAN_HIT || analyze_slot(i) == SLOT_CAN_STAND)
+    {
+      return_value = true;
+      break;
+    }
+  }
+
+  return return_value;
+}
+
+void mbj::play_dealer_slot()
+{
+  uint32_t earnings;
+  mbj_get_input mgi;
+  
+  dealer_turn = true;
+
+  while (slots_available() && analyze_slot(SLOT_0_DEALER) == SLOT_CAN_HIT)
+  {
+    table[0].push(pile.pop());
+    draw_table("Dealer Turn..", DELAY_1);
+  }
+
+  draw_table("TADA..", DELAY_1);
+  earnings = 0;
+
+  if (table[0].get_value() > 21)
+  {
+    for (int i = 1; i < 7; i++)
+    {
+      if (table[i].get_value() < 21)
+      {
+        earnings += slot_bet[i] * 2;
+      }
+
+      else if (table[i].get_value() == 21)
+      {
+        if (table[i].get_length() == 2)
+        {
+          earnings += slot_bet[i] * 25 / 10;
+        }
+        else
+        {
+          earnings += slot_bet[i] * 2;
+        }
+      }
+    }
+  }
+      
+  else if (table[0].get_value() == 21 && table[0].get_length() == 2)
+  {
+    for (int i = 1; i < 7; i++)
+    {
+      if (table[i].get_value() == 21 && table[i].get_length() == 2)
+      {
+        earnings += slot_bet[i];
+      }
+    }
+  }
+      
+  else if (table[0].get_value() == 21)
+  {
+    for (int i = 1; i < 7; i++)
+    {
+      if (table[i].get_value() == 21 && table[i].get_length() == 2)
+      {
+        earnings += slot_bet[i] * 25 / 10;
+      }
+
+      else if (table[i].get_value() == 21)
+      {
+        earnings += slot_bet[i];
+      }
+    }
+  }
+      
+  else
+  {
+    for (int i = 1; i < 7; i++)
+    {
+      if (table[i].get_value() == 21 && table[i].get_length() == 2)
+      {
+        earnings += slot_bet[i] * 25 / 10;
+      }
+
+      else if (table[i].get_value() <= 21 &&
+               table[i].get_value() > table[0].get_value())
+      {
+        earnings += slot_bet[i] * 2;
+      }
+ 
+      else if (table[i].get_value() <= 21 &&
+               table[i].get_value() == table[0].get_value())
+      {
+        earnings += slot_bet[i];
+      }
+    }
+  }
+      
+  printf("Round Summary (CASH) ");
+  mbj_format(earnings);
+  mgi.mbj_get_char(" ..Press Enter to Continue..");
+  wallet += earnings;
 }
 

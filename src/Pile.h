@@ -28,4 +28,4 @@ private:
   Card *deck;
 };
 
-#endif /* PILE_H */
+#endif
