@@ -1,4 +1,54 @@
 #include "mbj.h"
+#include "FileReaderWriter.h"
+
+int32_t read_wallet_from_file()
+{
+  int c;
+  int mult = 1;
+  int32_t num = 0;
+  FileReaderWriter frw;
+
+  if (frw.open(".score", "rb"))
+  {
+    while (true)
+    {
+      c = frw.read_byte();
+      
+      if (c == EOF) { break; }
+      
+      num = num + mult * (c);
+      mult *= 10;
+    }
+
+    frw.close();
+  }
+
+  return num;
+}
+
+void save_wallet_to_file(int32_t wallet)
+{
+  int32_t num;
+  FileReaderWriter frw;
+
+  if (frw.open(".score", "wb"))
+  {
+    while (wallet > 0)
+    {
+      num = wallet % 10;
+      wallet /= 10;
+      frw.write_byte(num);
+    }
+
+    frw.close();
+    printf("[ SUCCESS ] - Wallet saved to disc!\n");
+  }
+
+  else
+  {
+    printf("[ WARNING ] - Could not open file to save your wallet!\n");
+  }
+}
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +59,10 @@ int main(int argc, char *argv[])
   bool allow_split;
   bool allow_surrender;
   char slot_action;
+
+  int32_t old_wallet = read_wallet_from_file();
+
+  if (old_wallet != 0) { MBJ.set_wallet(old_wallet); }
 
   // play forever
   while (true)
@@ -27,6 +81,8 @@ int main(int argc, char *argv[])
       {
         printf("\nLeaving so soon?\n");
 
+        // try to save wallet to file
+        save_wallet_to_file(MBJ.get_wallet());
         return 0;
       }
 
@@ -88,6 +144,8 @@ int main(int argc, char *argv[])
           case 'q':
           case 'Q':
             printf("\nLeaving so soon?\n");
+            // try to save wallet to file
+            save_wallet_to_file(MBJ.get_wallet());
             return 0;
             
           case 'h':
