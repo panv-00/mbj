@@ -211,6 +211,7 @@ int main(int argc, char *argv[])
       if (MBJ.get_wallet() == 0)
       {
         printf("You are bankrupt.. :(\n");
+        save_wallet_to_file(MBJ.get_wallet());
         
         return 0;
       }
@@ -218,7 +219,8 @@ int main(int argc, char *argv[])
       if (MBJ.get_wallet() >= 1000000)
       {
         printf("The Casino in bankrupt.. :)\n");
-        
+        save_wallet_to_file(1000);
+
         return 0;
       }
 
