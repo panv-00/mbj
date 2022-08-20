@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
       if (MBJ.get_wallet() == 0)
       {
         printf("You are bankrupt.. :(\n");
-        save_wallet_to_file(MBJ.get_wallet());
+        save_wallet_to_file(1000);
         
         return 0;
       }
