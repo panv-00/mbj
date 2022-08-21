@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
   bool allow_surrender;
   char slot_action;
 
+  clear_screen(BEGIN_TO_END);
+
   int32_t old_wallet = read_wallet_from_file();
 
   if (old_wallet != 0) { MBJ.set_wallet(old_wallet); }

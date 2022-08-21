@@ -15,6 +15,17 @@ void move_right(int count)  { printf("\x1b[%dC", count);   }
 void move_left(int count)   { printf("\x1b[%dD", count);   }
 void move_to(int r, int c)  { printf("\x1b[%d;%df", r, c); }
 
+void soft_clear_screen(int max_row)
+{
+  for (int i = 1; i <= max_row; i++)
+  {
+    move_to(i, 1);
+    clear_line(2);
+  }
+  
+  move_to(1, 1);
+}
+
 void draw_thin_box(int width, int height)
 {
   save_position();

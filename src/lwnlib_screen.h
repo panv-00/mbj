@@ -1,6 +1,8 @@
 #ifndef LWNLIB_SCREEN_H
 #define LWNLIB_SCREEN_H
 
+#define MAX_ROWS 28
+
 enum color_codes
 {
   COLOR_DEFAULT = 0,
@@ -39,6 +41,8 @@ void move_down(int count);
 void move_right(int count);
 void move_left(int count);
 void move_to(int r, int c);
+
+void soft_clear_screen(int max_row);
 
 void draw_thin_box(int width, int height);
 void draw_box(int width, int height);

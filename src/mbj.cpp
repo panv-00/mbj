@@ -24,7 +24,7 @@ void mbj::draw_table(const char *message, int post_delay)
   int tmp;
   bool show_card;
 
-  clear_screen(BEGIN_TO_END);
+  soft_clear_screen(MAX_ROWS);
   save_position();
   
   for (int i = 0; i < 7; i++)
@@ -135,7 +135,7 @@ void mbj::setup_game()
 
 void mbj::draw_welcome_screen(int status, int slot, int post_delay)
 {
-  clear_screen(BEGIN_TO_END);
+  soft_clear_screen(MAX_ROWS);
   save_position();
  
   move_to(2, 2);
