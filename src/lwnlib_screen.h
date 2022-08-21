@@ -1,7 +1,7 @@
 #ifndef LWNLIB_SCREEN_H
 #define LWNLIB_SCREEN_H
 
-#define MAX_ROWS 28
+#define MAX_ROWS 29
 
 enum color_codes
 {
