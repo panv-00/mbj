@@ -13,7 +13,7 @@ mbj::~mbj()
 void mbj::draw_card(Card card, int row, int col, bool show_card)
 {
   move_to(row, col);
-  draw_shape(2, 1, ',', '-', '.', '|', '|', '|', '_', '|');
+  draw_thin_box(2, 1);
   move_to(row + 1, col + 1);
   if (show_card) { card.dump(); }
 }

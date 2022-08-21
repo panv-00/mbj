@@ -40,26 +40,7 @@ void move_right(int count);
 void move_left(int count);
 void move_to(int r, int c);
 
-void draw_line(
-    int width,
-    const int start_char,
-    const int center_char, 
-    const int end_char
-    );
-
-void draw_shape(
-    int width,
-    int height,
-    const int top_start_char,
-    const int top_center_char,
-    const int top_end_char,
-    const int mid_start_char,
-    const int mid_end_char,
-    const int bottom_start_char,
-    const int bottom_center_char,
-    const int bottom_end_char
-    );
-
+void draw_thin_box(int width, int height);
 void draw_box(int width, int height);
 
 #endif
