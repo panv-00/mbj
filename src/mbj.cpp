@@ -237,6 +237,7 @@ void mbj::play_dealer_slot()
   mbj_get_input mgi;
   
   dealer_turn = true;
+  draw_table("Dealer Turn..", DELAY_1);
 
   while (slots_available() && analyze_slot(SLOT_0_DEALER) == SLOT_CAN_HIT)
   {
