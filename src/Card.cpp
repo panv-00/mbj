@@ -37,7 +37,26 @@ void Card::set_face_suit(char f, char s)
 
 void Card::dump()
 {
-  printf("%c%c", face, suit);
+  printf("%c", face);
+  
+  switch (suit)
+  {
+    case 'H':
+      printf("♥");
+      break;
+  
+    case 'S':
+      printf("♠");
+      break;
+    
+    case 'D':
+      printf("♦");
+      break;
+    
+    case 'C':
+      printf("♣");
+      break;
+  }
 }
 
 void Card::set_card(Card card)
