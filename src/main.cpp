@@ -201,7 +201,8 @@ int main(int argc, char *argv[])
         }
       }
 
-      if (MBJ.slots_available()) { MBJ.play_dealer_slot(); }
+//      if (MBJ.slots_available()) { MBJ.play_dealer_slot(); }
+      MBJ.play_dealer_slot();
 
       for (int i = 0; i < 7; i++)
       {

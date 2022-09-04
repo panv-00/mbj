@@ -86,7 +86,9 @@ void mbj::draw_table(const char *message, int post_delay)
   mbj_format(wallet);
   printf("     Bets:");
   mbj_format(slot_bet[1] + slot_bet[2] + slot_bet[3] + slot_bet[4] + slot_bet[5] + slot_bet[6]);
+
   if (pile.get_length() <= split) { set_color(COLOR_RED_FG); }
+  
   printf("    Cards:%4d", pile.get_length());
   set_color(COLOR_DEFAULT);
 
@@ -204,6 +206,11 @@ int mbj::set_bets()
 
 int mbj::analyze_slot(int slot_index)
 {
+  if (slot_index > 0 && get_slot_bet(slot_index) == 0) 
+  {
+    return SLOT_BUST; 
+  }
+
   if (table[slot_index].get_value() < 17) { return SLOT_CAN_HIT; }
 
   if (table[slot_index].get_value() < 21 ||
