@@ -29,9 +29,11 @@ void soft_clear_screen(int max_row)
 void draw_thin_box(int width, int height)
 {
   save_position();
+
   printf("╭");
   for (int i = 0; i < width; i++) { printf("─"); }
   printf("╮");
+
   restore_position();
   move_down(1);
   
@@ -45,9 +47,11 @@ void draw_thin_box(int width, int height)
   }
 
   save_position();
+
   printf("╰");
   for (int i = 0; i < width; i++) { printf("─"); }
   printf("╯");
+
   restore_position();
   move_down(1);
 }
@@ -55,9 +59,11 @@ void draw_thin_box(int width, int height)
 void draw_box(int width, int height)
 {
   save_position();
+
   printf("┏");
   for (int i = 0; i < width; i++) { printf("━"); }
   printf("┓");
+
   restore_position();
   move_down(1);
   
@@ -71,9 +77,11 @@ void draw_box(int width, int height)
   }
 
   save_position();
+
   printf("┗");
   for (int i = 0; i < width; i++) { printf("━"); }
   printf("┛");
+
   restore_position();
   move_down(1);
 }

@@ -45,6 +45,7 @@ Card Pile::pop()
   {
     value -= 1;
   }
+  
   else
   {
     value -= card.get_value();

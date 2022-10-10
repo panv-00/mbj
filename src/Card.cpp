@@ -18,6 +18,7 @@ int Card::find(const char arr[], int len, char seek)
   {
     if (arr[i] == seek) return i;
   }
+
   return -1;
 }
 

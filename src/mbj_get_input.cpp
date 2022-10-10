@@ -19,6 +19,7 @@ int32_t mbj_get_input::to_int(const char *s)
   uint32_t max_num = 1000000;
   
   if (s[0] == 0) { return 0; }
+
   if (s[0] == 'q' || s[0] == 'Q') { return -1; }
   
   while (*s != 0 && *s != ' ')
@@ -26,10 +27,13 @@ int32_t mbj_get_input::to_int(const char *s)
     if (*s < '0' || *s > '9')
     {
       num = 0;
+  
       break; 
     }
     num = 10 * num + (*s - '0');
+    
     if (num >= max_num) { return max_num; }
+    
     s++;
   }
 
@@ -55,7 +59,9 @@ void mbj_get_input::skip_whitespaces()
   do
   {
     c = getc(stdin);
+    
     if (!is_whitespace(c)) { break; }
+
   } while (1);
 
   ungetc(c, stdin);
@@ -76,6 +82,7 @@ int mbj_get_input::get_token()
     if (token_length == MAX_TOKEN_LENGTH)
     {
       return_value = 1;
+    
       break;
     }
     
@@ -84,6 +91,7 @@ int mbj_get_input::get_token()
     if (c == '\n')
     {
       token[token_length] = '\0';
+      
       break;
     }
 
@@ -106,6 +114,7 @@ int32_t mbj_get_input::mbj_get_num(const char *prompt)
     {
       read = get_token();
     }
+    
     return 0;
   }
 
@@ -125,6 +134,7 @@ char mbj_get_input::mbj_get_char(const char *prompt)
     {
       read = get_token();
     }
+    
     return 0;
   }
 

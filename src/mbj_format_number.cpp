@@ -16,6 +16,7 @@ void mbj_format(uint32_t number)
     {
       output[8 - index] = ',';
     }
+
     else
     {
       output[8 - index] = '0' + number % 10;

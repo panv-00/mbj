@@ -15,6 +15,7 @@ void mbj::draw_card(Card card, int row, int col, bool show_card)
   move_to(row, col);
   draw_thin_box(2, 1);
   move_to(row + 1, col + 1);
+
   if (show_card) { card.dump(); }
 }
 
@@ -72,9 +73,8 @@ void mbj::draw_table(const char *message, int post_delay)
           }
         }
       }
-    
+      
       set_color(COLOR_DEFAULT);
-
       printf("\n");
     }
   }
@@ -215,7 +215,10 @@ int mbj::analyze_slot(int slot_index)
 
   if (table[slot_index].get_value() < 21 ||
         (table[slot_index].get_value() == 21 &&
-         table[slot_index].get_length() != 2)) { return SLOT_CAN_STAND; }
+         table[slot_index].get_length() != 2))
+  {
+    return SLOT_CAN_STAND;
+  }
 
   if (table[slot_index].get_value() == 21) { return SLOT_BJ; }
 
@@ -270,6 +273,7 @@ void mbj::play_dealer_slot()
         {
           earnings += slot_bet[i] * 25 / 10;
         }
+  
         else
         {
           earnings += slot_bet[i] * 2;
