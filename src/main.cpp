@@ -106,8 +106,9 @@ int main(int argc, char *argv[])
           MBJ.deal_to_table(MBJ.get_slot());
         }
 
-        while ((MBJ.get_table_value(MBJ.get_slot()) >= 21 || MBJ.get_slot_bet(MBJ.get_slot()) == 0) &&
-            MBJ.get_slot() != 7)
+        while ((MBJ.get_table_value(MBJ.get_slot()) >= 21 ||
+                MBJ.get_slot_bet(MBJ.get_slot()) == 0) &&
+                MBJ.get_slot() != 7)
         {
           MBJ.increment_slot();
         }
@@ -121,18 +122,26 @@ int main(int argc, char *argv[])
         {
           allow_surrender = true;
 
-          if (MBJ.get_wallet() >= MBJ.get_slot_bet(MBJ.get_slot())) { allow_double = true; }
+          if (MBJ.get_wallet() >= MBJ.get_slot_bet(MBJ.get_slot()))
+          {
+            allow_double = true;
+          }
         }
 
         if (allow_surrender) { printf("R->suRrender "); }
 
         if (allow_double) { printf("D->Double "); }
 
-        if (!MBJ.slot_is_even() &&
-            MBJ.get_table_length(MBJ.get_slot() + 1) == 0 &&
-            MBJ.get_table_length(MBJ.get_slot()) == 2 &&
-            MBJ.get_wallet() >= MBJ.get_slot_bet(MBJ.get_slot()) &&
-            MBJ.read_from_table(MBJ.get_slot(), 0).get_value() == MBJ.read_from_table(MBJ.get_slot(), 1).get_value())
+        if
+        (
+          !MBJ.slot_is_even() &&
+          MBJ.get_table_length(MBJ.get_slot() + 1) == 0 &&
+          MBJ.get_table_length(MBJ.get_slot()) == 2 &&
+          MBJ.get_wallet() >= MBJ.get_slot_bet(MBJ.get_slot()) &&
+
+          MBJ.read_from_table(MBJ.get_slot(), 0).get_value() ==
+          MBJ.read_from_table(MBJ.get_slot(), 1).get_value()
+        )
         {
           allow_split = true;
         }
@@ -188,7 +197,11 @@ int main(int argc, char *argv[])
             if (allow_split)
             {
               MBJ.deal_table_to_table(MBJ.get_slot(), MBJ.get_slot() + 1);
-              MBJ.set_slot_bet(MBJ.get_slot() + 1, MBJ.get_slot_bet(MBJ.get_slot()));
+              MBJ.set_slot_bet
+              (
+                MBJ.get_slot() + 1, MBJ.get_slot_bet(MBJ.get_slot())
+              );
+
               MBJ.decrement_wallet(MBJ.get_slot_bet(MBJ.get_slot()));
               MBJ.deal_to_table(MBJ.get_slot());
 
@@ -201,7 +214,6 @@ int main(int argc, char *argv[])
         }
       }
 
-//      if (MBJ.slots_available()) { MBJ.play_dealer_slot(); }
       MBJ.play_dealer_slot();
 
       for (int i = 0; i < 7; i++)
