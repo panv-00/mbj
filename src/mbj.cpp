@@ -1,14 +1,8 @@
 #include "mbj.h"
 
-mbj::mbj()
-{
+mbj::mbj() {}
 
-}
-
-mbj::~mbj()
-{
-
-}
+mbj::~mbj() {}
 
 void mbj::draw_card(Card card, int row, int col, bool show_card)
 {
@@ -16,7 +10,10 @@ void mbj::draw_card(Card card, int row, int col, bool show_card)
   draw_thin_box(2, 1);
   move_to(row + 1, col + 1);
 
-  if (show_card) { card.dump(); }
+  if (show_card)
+  {
+    card.Dump();
+  }
 }
 
 void mbj::draw_table(const char *message, int post_delay)
@@ -27,7 +24,7 @@ void mbj::draw_table(const char *message, int post_delay)
 
   soft_clear_screen(MAX_ROWS);
   save_position();
-  
+
   for (int i = 0; i < 7; i++)
   {
     if (i == 0 || slot_bet[i] > 0)
@@ -38,33 +35,39 @@ void mbj::draw_table(const char *message, int post_delay)
       {
         set_color(COLOR_GREEN_FG);
       }
-      
+
       if (i == 0 && dealer_turn && table[i].get_value() == 21)
       {
         set_color(COLOR_GREEN_FG);
       }
-      
-      if (table[i].get_value() > 21) { set_color(COLOR_RED_FG); }
 
-      if (i == slot) { set_color(COLOR_BLUE_FG); }
+      if (table[i].get_value() > 21)
+      {
+        set_color(COLOR_RED_FG);
+      }
+
+      if (i == slot)
+      {
+        set_color(COLOR_BLUE_FG);
+      }
 
       for (int j = 0; j < tmp; j++)
       {
         card = table[i].read(j);
         show_card = true;
-        
+
         if (!dealer_turn && i == 0 && j == 1)
         {
           show_card = false;
         }
-     
-        draw_card(card, 5 + i*3, 6 + j*4, show_card);
-      
+
+        draw_card(card, 5 + i * 3, 6 + j * 4, show_card);
+
         if (i != 0 || dealer_turn == 1)
         {
           move_up(1);
           printf("\n  %2d", table[i].get_value());
-         
+
           if (i != 0)
           {
             move_right(BOX_WIDTH - 17);
@@ -73,7 +76,7 @@ void mbj::draw_table(const char *message, int post_delay)
           }
         }
       }
-      
+
       set_color(COLOR_DEFAULT);
       printf("\n");
     }
@@ -85,10 +88,14 @@ void mbj::draw_table(const char *message, int post_delay)
   printf("Round:%4d    Wallet:", turn);
   mbj_format(wallet);
   printf("     Bets:");
-  mbj_format(slot_bet[1] + slot_bet[2] + slot_bet[3] + slot_bet[4] + slot_bet[5] + slot_bet[6]);
+  mbj_format(slot_bet[1] + slot_bet[2] + slot_bet[3] + slot_bet[4] +
+             slot_bet[5] + slot_bet[6]);
 
-  if (pile.get_length() <= split) { set_color(COLOR_RED_FG); }
-  
+  if (pile.get_length() <= split)
+  {
+    set_color(COLOR_RED_FG);
+  }
+
   printf("    Cards:%4d", pile.get_length());
   set_color(COLOR_DEFAULT);
 
@@ -139,7 +146,7 @@ void mbj::draw_welcome_screen(int status, int slot, int post_delay)
 {
   soft_clear_screen(MAX_ROWS);
   save_position();
- 
+
   move_to(2, 2);
   printf("Welcome to my BlackJack. A game of Passion!");
 
@@ -151,15 +158,21 @@ void mbj::draw_welcome_screen(int status, int slot, int post_delay)
   {
     move_to(4 + i, 5);
 
-    if (i == slot) { set_color(COLOR_BLUE_FG); }
+    if (i == slot)
+    {
+      set_color(COLOR_BLUE_FG);
+    }
 
     printf("Slot %d bet: ", i);
     mbj_format(slot_bet[2 * (i - 1) + 1]);
 
-    if (i == slot) { set_color(COLOR_DEFAULT); }
+    if (i == slot)
+    {
+      set_color(COLOR_DEFAULT);
+    }
   }
 
-  if(status == STATUS_READY)
+  if (status == STATUS_READY)
   {
     move_to(10, 2);
     printf("Setting the table!");
@@ -181,7 +194,7 @@ int mbj::set_bets()
 
   for (int i = 1; i <= 3; i++)
   {
-    while(1)
+    while (1)
     {
       draw_welcome_screen(STATUS_WAITING, i, DELAY_0);
       printf("Slot %d -> ", i);
@@ -206,21 +219,27 @@ int mbj::set_bets()
 
 int mbj::analyze_slot(int slot_index)
 {
-  if (slot_index > 0 && get_slot_bet(slot_index) == 0) 
+  if (slot_index > 0 && get_slot_bet(slot_index) == 0)
   {
-    return SLOT_BUST; 
+    return SLOT_BUST;
   }
 
-  if (table[slot_index].get_value() < 17) { return SLOT_CAN_HIT; }
+  if (table[slot_index].get_value() < 17)
+  {
+    return SLOT_CAN_HIT;
+  }
 
   if (table[slot_index].get_value() < 21 ||
-        (table[slot_index].get_value() == 21 &&
-         table[slot_index].get_length() != 2))
+      (table[slot_index].get_value() == 21 &&
+       table[slot_index].get_length() != 2))
   {
     return SLOT_CAN_STAND;
   }
 
-  if (table[slot_index].get_value() == 21) { return SLOT_BJ; }
+  if (table[slot_index].get_value() == 21)
+  {
+    return SLOT_BJ;
+  }
 
   return SLOT_BUST;
 }
@@ -245,7 +264,7 @@ void mbj::play_dealer_slot()
 {
   uint32_t earnings;
   mbj_get_input mgi;
-  
+
   dealer_turn = true;
   draw_table("Dealer Turn..", DELAY_1);
 
@@ -273,7 +292,7 @@ void mbj::play_dealer_slot()
         {
           earnings += slot_bet[i] * 25 / 10;
         }
-  
+
         else
         {
           earnings += slot_bet[i] * 2;
@@ -281,7 +300,7 @@ void mbj::play_dealer_slot()
       }
     }
   }
-      
+
   else if (table[0].get_value() == 21 && table[0].get_length() == 2)
   {
     for (int i = 1; i < 7; i++)
@@ -292,7 +311,7 @@ void mbj::play_dealer_slot()
       }
     }
   }
-      
+
   else if (table[0].get_value() == 21)
   {
     for (int i = 1; i < 7; i++)
@@ -308,7 +327,7 @@ void mbj::play_dealer_slot()
       }
     }
   }
-      
+
   else
   {
     for (int i = 1; i < 7; i++)
@@ -323,7 +342,7 @@ void mbj::play_dealer_slot()
       {
         earnings += slot_bet[i] * 2;
       }
- 
+
       else if (table[i].get_value() <= 21 &&
                table[i].get_value() == table[0].get_value())
       {
@@ -331,10 +350,9 @@ void mbj::play_dealer_slot()
       }
     }
   }
-      
+
   printf("Round Summary (CASH) ");
   mbj_format(earnings);
   mgi.mbj_get_char(" ..Press Enter to Continue..");
   wallet += earnings;
 }
-

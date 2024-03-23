@@ -2,65 +2,57 @@
 
 #include "Card.h"
 
-Card::Card()
-{
+Card::Card() {}
+Card::~Card() {}
 
-}
-
-Card::~Card()
-{
-
-}
-
-int Card::find(const char arr[], int len, char seek)
-{
-  for (int i = 0; i < len; ++i)
-  {
-    if (arr[i] == seek) return i;
-  }
-
-  return -1;
-}
-
-int Card::face_to_value(char f)
-{
-  int face_index = find(card_faces, 13, f);
-
-  return card_values[face_index];
-}
-
-void Card::set_face_suit(char f, char s)
+void Card::SetFaceSuit(char f, char s)
 {
   face = f;
   suit = s;
-  value = face_to_value(f);
-}
 
-void Card::dump()
-{
-  printf("%c", face);
-  
-  switch (suit)
+  if (f >= '2' && f <= '9')
   {
-    case 'H':
-      printf("♥");
-      break;
-  
-    case 'S':
-      printf("♠");
-      break;
-    
-    case 'D':
-      printf("♦");
-      break;
-    
-    case 'C':
-      printf("♣");
-      break;
+    value = f - '2' + 2;
+  }
+
+  else if (f == 'T' || f == 'J' || f == 'Q' || f == 'K')
+  {
+    value = 10;
+  }
+
+  else if (f == 'A')
+  {
+    value = 11;
+  }
+
+  else
+  {
+    value = 0;
   }
 }
 
-void Card::set_card(Card card)
+void Card::Dump()
 {
-  set_face_suit(card.get_face(), card.get_suit());
+  printf("%c", face);
+
+  switch (suit)
+  {
+  case 'H':
+    printf("♥");
+    break;
+
+  case 'S':
+    printf("♠");
+    break;
+
+  case 'D':
+    printf("♦");
+    break;
+
+  case 'C':
+    printf("♣");
+    break;
+  }
 }
+
+void Card::SetCard(Card card) { SetFaceSuit(card.GetFace(), card.GetSuit()); }

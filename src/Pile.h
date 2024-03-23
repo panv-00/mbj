@@ -2,6 +2,7 @@
 #define PILE_H
 
 #define DECKS 4
+#include "Card.h"
 
 class Pile
 {

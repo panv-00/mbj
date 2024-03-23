@@ -1,5 +1,5 @@
-#include "mbj.h"
 #include "FileReaderWriter.h"
+#include "mbj.h"
 
 int32_t read_wallet_from_file()
 {
@@ -13,9 +13,12 @@ int32_t read_wallet_from_file()
     while (true)
     {
       c = frw.read_byte();
-      
-      if (c == EOF) { break; }
-      
+
+      if (c == EOF)
+      {
+        break;
+      }
+
       num = num + mult * (c);
       mult *= 10;
     }
@@ -64,12 +67,18 @@ int main(int argc, char *argv[])
 
   int32_t old_wallet = read_wallet_from_file();
 
-  if (old_wallet != 0) { MBJ.set_wallet(old_wallet); }
+  if (old_wallet != 0)
+  {
+    MBJ.set_wallet(old_wallet);
+  }
 
   // play forever
   while (true)
   {
-    while (MBJ.get_pile_length() > 0) { MBJ.pop_pile(); }
+    while (MBJ.get_pile_length() > 0)
+    {
+      MBJ.pop_pile();
+    }
     MBJ.populate_full_deck();
     MBJ.shuffle_pile();
     MBJ.set_turn(0);
@@ -108,12 +117,15 @@ int main(int argc, char *argv[])
 
         while ((MBJ.get_table_value(MBJ.get_slot()) >= 21 ||
                 MBJ.get_slot_bet(MBJ.get_slot()) == 0) &&
-                MBJ.get_slot() != 7)
+               MBJ.get_slot() != 7)
         {
           MBJ.increment_slot();
         }
 
-        if (MBJ.get_slot() == 7) { break; }
+        if (MBJ.get_slot() == 7)
+        {
+          break;
+        }
 
         MBJ.draw_table("Waiting for Action..", DELAY_0);
         printf("[ Q->Quit H->Hit S->Stand ");
@@ -128,89 +140,92 @@ int main(int argc, char *argv[])
           }
         }
 
-        if (allow_surrender) { printf("R->suRrender "); }
+        if (allow_surrender)
+        {
+          printf("R->suRrender ");
+        }
 
-        if (allow_double) { printf("D->Double "); }
+        if (allow_double)
+        {
+          printf("D->Double ");
+        }
 
-        if
-        (
-          !MBJ.slot_is_even() &&
-          MBJ.get_table_length(MBJ.get_slot() + 1) == 0 &&
-          MBJ.get_table_length(MBJ.get_slot()) == 2 &&
-          MBJ.get_wallet() >= MBJ.get_slot_bet(MBJ.get_slot()) &&
+        if (!MBJ.slot_is_even() &&
+            MBJ.get_table_length(MBJ.get_slot() + 1) == 0 &&
+            MBJ.get_table_length(MBJ.get_slot()) == 2 &&
+            MBJ.get_wallet() >= MBJ.get_slot_bet(MBJ.get_slot()) &&
 
-          MBJ.read_from_table(MBJ.get_slot(), 0).get_value() ==
-          MBJ.read_from_table(MBJ.get_slot(), 1).get_value()
-        )
+            MBJ.read_from_table(MBJ.get_slot(), 0).GetValue() ==
+                MBJ.read_from_table(MBJ.get_slot(), 1).GetValue())
         {
           allow_split = true;
         }
 
-        if (allow_split) { printf("T->spliT "); }
+        if (allow_split)
+        {
+          printf("T->spliT ");
+        }
 
         slot_action = mgi.mbj_get_char("] : ");
 
-        switch(slot_action)
+        switch (slot_action)
         {
-          case 'q':
-          case 'Q':
-            printf("\nLeaving so soon?\n");
-            // try to save wallet to file
-            save_wallet_to_file(MBJ.get_wallet());
-            return 0;
-            
-          case 'h':
-          case 'H':
-            MBJ.deal_to_table(MBJ.get_slot());
-            break;
+        case 'q':
+        case 'Q':
+          printf("\nLeaving so soon?\n");
+          // try to save wallet to file
+          save_wallet_to_file(MBJ.get_wallet());
+          return 0;
 
-          case 's':
-          case 'S':
+        case 'h':
+        case 'H':
+          MBJ.deal_to_table(MBJ.get_slot());
+          break;
+
+        case 's':
+        case 'S':
+          MBJ.increment_slot();
+          break;
+
+        case 'r':
+        case 'R':
+          if (allow_surrender)
+          {
+            MBJ.increment_wallet(MBJ.get_slot_bet(MBJ.get_slot()) / 2);
+            MBJ.set_slot_bet(MBJ.get_slot(), 0);
             MBJ.increment_slot();
-            break;
+          }
+          break;
 
-          case 'r':
-          case 'R':
-            if (allow_surrender)
+        case 'd':
+        case 'D':
+          if (allow_double)
+          {
+            MBJ.decrement_wallet(MBJ.get_slot_bet(MBJ.get_slot()));
+            MBJ.set_slot_bet(MBJ.get_slot(),
+                             2 * MBJ.get_slot_bet(MBJ.get_slot()));
+            MBJ.deal_to_table(MBJ.get_slot());
+            MBJ.increment_slot();
+          }
+          break;
+
+        case 't':
+        case 'T':
+          if (allow_split)
+          {
+            MBJ.deal_table_to_table(MBJ.get_slot(), MBJ.get_slot() + 1);
+            MBJ.set_slot_bet(MBJ.get_slot() + 1,
+                             MBJ.get_slot_bet(MBJ.get_slot()));
+
+            MBJ.decrement_wallet(MBJ.get_slot_bet(MBJ.get_slot()));
+            MBJ.deal_to_table(MBJ.get_slot());
+
+            if (MBJ.read_from_table(MBJ.get_slot(), 0).GetFace() == 'A')
             {
-              MBJ.increment_wallet(MBJ.get_slot_bet(MBJ.get_slot()) / 2);
-              MBJ.set_slot_bet(MBJ.get_slot(), 0);
               MBJ.increment_slot();
             }
-            break;
-
-          case 'd':
-          case 'D':
-            if (allow_double)
-            {
-              MBJ.decrement_wallet(MBJ.get_slot_bet(MBJ.get_slot()));
-              MBJ.set_slot_bet(
-                  MBJ.get_slot(),
-                  2 * MBJ.get_slot_bet(MBJ.get_slot()));
-              MBJ.deal_to_table(MBJ.get_slot());
-              MBJ.increment_slot();
-            }
-            break;
-
-          case 't':
-          case 'T':
-            if (allow_split)
-            {
-              MBJ.deal_table_to_table(MBJ.get_slot(), MBJ.get_slot() + 1);
-              MBJ.set_slot_bet
-              (
-                MBJ.get_slot() + 1, MBJ.get_slot_bet(MBJ.get_slot())
-              );
-
-              MBJ.decrement_wallet(MBJ.get_slot_bet(MBJ.get_slot()));
-              MBJ.deal_to_table(MBJ.get_slot());
-
-              if (MBJ.read_from_table(MBJ.get_slot(), 0).get_face() == 'A')
-              {
-                MBJ.increment_slot();
-              }
-            }
-            break;
+          }
+          break;
         }
       }
 
@@ -227,7 +242,7 @@ int main(int argc, char *argv[])
       {
         printf("You are bankrupt.. :(\n");
         save_wallet_to_file(1000);
-        
+
         return 0;
       }
 
@@ -239,9 +254,11 @@ int main(int argc, char *argv[])
         return 0;
       }
 
-      if (MBJ.get_pile_length() <= MBJ.get_split()) { break; }
+      if (MBJ.get_pile_length() <= MBJ.get_split())
+      {
+        break;
+      }
     }
   }
   return 0;
 }
-

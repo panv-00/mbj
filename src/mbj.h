@@ -1,19 +1,17 @@
 #ifndef MBJ_H
 #define MBJ_H
 
+#include <stdint.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <stdint.h>
 
-#include "Card.h"
 #include "Pile.h"
 #include "lwnlib_screen.h"
-#include "mbj_get_input.h"
 #include "mbj_format_number.h"
+#include "mbj_get_input.h"
 
 #define BOX_WIDTH 63
 #define BOX_HEIGHT 24
-
 
 enum Slots
 {
@@ -79,11 +77,11 @@ public:
     while (table[s].get_length() > 0)
     {
       table[s].pop();
-    } 
+    }
   }
 
   int get_split() { return split; }
- 
+
   void set_wallet(int32_t value) { wallet = value; }
   int32_t get_wallet() { return wallet; }
   void increment_wallet(int32_t value) { wallet += value; }
@@ -101,7 +99,7 @@ public:
   void increment_turn() { turn++; }
   int get_turn() { return turn; }
 
-  void set_dealer_turn (bool turn) { dealer_turn = turn; }
+  void set_dealer_turn(bool turn) { dealer_turn = turn; }
   bool get_dealer_turn() { return dealer_turn; }
 
 private:
@@ -113,7 +111,6 @@ private:
   int slot;
   int turn;
   bool dealer_turn;
-
 };
 
 #endif
